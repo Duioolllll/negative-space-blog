@@ -1,0 +1,61 @@
+name: Sync from Notion
+
+on:
+  schedule:
+    - cron: "17 * * * *" # every hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: notion-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Notion setup
+        id: setup
+        run: |
+          if [ -z "${{ secrets.NOTION_TOKEN }}" ] || [ -z "${{ vars.NOTION_DATABASE_ID }}" ] || [ ! -f scripts/sync-notion.mjs ]; then
+            echo "::notice::Notion sync is not configured yet (NOTION_TOKEN secret / NOTION_DATABASE_ID variable)."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.setup.outputs.ready == 'true'
+        with:
+          node-version: 22
+      - name: Pull published posts
+        if: steps.setup.outputs.ready == 'true'
+        run: node scripts/sync-notion.mjs
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ vars.NOTION_DATABASE_ID }}
+      - name: Commit changes
+        id: commit
+        if: steps.setup.outputs.ready == 'true'
+        run: |
+          git add content public/content 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git config user.name "notion-sync"
+            git config user.email "notion-sync@users.noreply.github.com"
+            git commit -m "content: sync from Notion"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Pushes made with GITHUB_TOKEN don't trigger other workflows, so deploy here.
+  deploy:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
