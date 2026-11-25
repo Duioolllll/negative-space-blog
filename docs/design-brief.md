@@ -33,3 +33,13 @@ Hero plate (darkroom tray), featured essay photo (desk by window), 6 contact-she
 
 ## Anti-convergence ledger
 First build in this chat. Axes derived from the material world (paper, silver gelatin, safelight, film base): palette paper+ink+safelight red; Satoshi/Pretendard/JetBrains Mono; masked type hero; C3; garments above; corner language: all sharp 0px, hairline-ruled.
+
+## Liquid Glass layer (2026-11-25 redesign)
+Apple's Liquid Glass rules, adapted to the web (`.lg` in styles.css):
+- Two layers. The **content layer** is the printed matter: paper, photographs, type, contact frames. It stays square-cornered and solid. The **functional layer** floats above it and is glass: the nav capsule, the hero's primary action, the contact-sheet loupe, the newsletter field.
+- Glass is round (capsules, circles); print is square. The contrast between the two is the point.
+- Never glass on glass: controls inside a glass surface are solid fills (nav subscribe, form submit).
+- Variants: `lg-regular` (light, ink text) anywhere; `lg-clear` (dark, white text) only over photographs, always with a dimming gradient behind; `lg-prominent` (safelight red) for the single primary action in view.
+- Text on glass is full contrast; hierarchy by size and weight.
+- `prefers-reduced-transparency` turns glass solid; `prefers-contrast: more` adds an outline.
+- Signature moment: the loupe. Hovering a contact-sheet frame shows a glass lens that magnifies the print, the way a photographer reads a contact sheet.

@@ -165,7 +165,7 @@ export function Hero() {
                 쓰고, 지우고, 기다리는 동안 떠오르는 것들을 기록합니다. 글쓰기와 코드, 디자인과 사진에 대한 느린 블로그.
               </p>
             </div>
-            <ViewfinderLink href="#featured">최신 글 읽기</ViewfinderLink>
+            <a href="#featured" className="lg lg-prominent lg-interactive ns-cta-hero self-start md:self-auto">최신 글 읽기</a>
           </div>
         </div>
 
@@ -181,18 +181,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  );
-}
-
-function ViewfinderLink({ href, children }: { href: string; children: string }) {
-  return (
-    <a href={href} className="ns-viewfinder group relative inline-flex items-center gap-3 self-start px-5 py-4 text-base text-ink md:self-auto">
-      <span className="ns-vf-corner ns-vf-tl" aria-hidden="true" />
-      <span className="ns-vf-corner ns-vf-tr" aria-hidden="true" />
-      <span className="ns-vf-corner ns-vf-bl" aria-hidden="true" />
-      <span className="ns-vf-corner ns-vf-br" aria-hidden="true" />
-      <span className="h-2 w-2 bg-safelight" aria-hidden="true" />
-      {children}
-    </a>
   );
 }

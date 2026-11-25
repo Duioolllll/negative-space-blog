@@ -38,28 +38,27 @@ export function Letters() {
   const invalid = status.kind === "error";
 
   return (
-    <section id="letters" className="ns-letters px-5 pb-24 md:px-10 md:pb-36" aria-labelledby="letters-title">
-      <div className="border border-ink p-6 md:grid md:grid-cols-12 md:gap-8 md:p-14">
-        <div className="md:col-span-6">
-          <h2 id="letters-title" className="text-4xl leading-[1.1] tracking-tight md:text-5xl">
-            새 글이 현상되면 알려드릴게요
-          </h2>
-          <p className="mt-5 max-w-[28rem] text-base leading-relaxed text-mid">
-            한 달에 두 번쯤, 새로 쓴 글 한 편과 짧은 메모를 보냅니다. 광고는 없어요.
-          </p>
-        </div>
-        <div className="mt-10 md:col-span-5 md:col-start-8 md:mt-0 md:self-end">
+    <section id="letters" className="ns-letters relative overflow-hidden" aria-labelledby="letters-title">
+      <img src="/assets/safelight.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+      <div className="ns-letters-dim absolute inset-0" aria-hidden="true" />
+      <div className="relative flex min-h-[78vh] flex-col justify-end px-5 pt-40 pb-14 md:px-10 md:pb-20">
+        <h2 id="letters-title" className="max-w-[16ch] text-4xl leading-[1.1] tracking-tight text-white md:text-6xl">
+          새 글이 현상되면 알려드릴게요
+        </h2>
+        <p className="mt-5 max-w-[30rem] text-base leading-relaxed text-white/85">
+          한 달에 두 번쯤, 새로 쓴 글 한 편과 짧은 메모를 보냅니다. 광고는 없어요.
+        </p>
+
+        <div className="mt-10 max-w-[34rem]">
           {status.kind === "done" ? (
-            <div className="ns-receipt border-t border-ink pt-5" role="status">
-              <p className="ns-mono text-xs text-safelight">RECEIVED</p>
-              <p className="mt-2 text-xl leading-snug">
-                {status.already ? "이미 구독 중인 주소예요. 다음 글에서 만나요." : "구독해 주셔서 고마워요. 다음 글에서 만나요."}
-              </p>
-            </div>
+            <p className="lg lg-clear ns-receipt inline-flex items-center gap-3 px-6 py-4 text-lg text-white" role="status">
+              <span className="h-2.5 w-2.5 rounded-full bg-safelight" aria-hidden="true" />
+              {status.already ? "이미 구독 중인 주소예요. 다음 글에서 만나요." : "구독했어요. 다음 글에서 만나요."}
+            </p>
           ) : (
-            <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3">
-              <label htmlFor={inputId} className="text-sm text-graphite">이메일</label>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch">
+            <form onSubmit={onSubmit} noValidate>
+              <label htmlFor={inputId} className="mb-3 block text-sm text-white">이메일</label>
+              <div className="lg lg-clear lg-interactive ns-field">
                 <input
                   id={inputId}
                   type="email"
@@ -73,12 +72,14 @@ export function Letters() {
                   aria-invalid={invalid}
                   aria-describedby={invalid ? errorId : undefined}
                   placeholder="you@example.com"
-                  className="ns-input min-w-0 flex-1 border-b border-ink bg-transparent px-0 py-3 text-lg outline-none placeholder:text-mid"
+                  className="ns-field-input"
                 />
-                <StampButton busy={status.kind === "sending"} />
+                <button type="submit" disabled={status.kind === "sending"} className="ns-field-submit">
+                  {status.kind === "sending" ? "보내는 중" : "구독하기"}
+                </button>
               </div>
               {invalid && (
-                <p id={errorId} className="text-sm text-safelight" role="alert">
+                <p id={errorId} className="ns-field-error mt-3 text-sm" role="alert">
                   {status.message}
                 </p>
               )}
@@ -87,14 +88,5 @@ export function Letters() {
         </div>
       </div>
     </section>
-  );
-}
-
-function StampButton({ busy }: { busy: boolean }) {
-  return (
-    <button type="submit" disabled={busy} className="ns-stamp relative shrink-0 px-6 py-3 text-base">
-      <span className="ns-stamp-ink" aria-hidden="true" />
-      <span className="relative">{busy ? "보내는 중" : "구독하기"}</span>
-    </button>
   );
 }

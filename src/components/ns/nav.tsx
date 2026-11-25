@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { GlassLight } from "./glass";
 import { Monogram } from "./monogram";
 
 const GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
@@ -31,29 +32,28 @@ function DecodeLink({ href, label }: { href: string; label: string }) {
     }, 38);
   };
 
+  // A solid fill inside the glass bar: glass never sits on glass.
   return (
-    <a href={href} onMouseEnter={run} onFocus={run} className="ns-decode ns-mono relative px-3 py-2 text-xs">
-      <span className="ns-decode-bracket" aria-hidden="true">[</span>
+    <a href={href} onMouseEnter={run} onFocus={run} className="ns-nav-cta">
       <span ref={ref} aria-label={label}>{label}</span>
-      <span className="ns-decode-bracket" aria-hidden="true">]</span>
     </a>
   );
 }
 
 export function Nav() {
   return (
-    <header className="ns-nav fixed inset-x-0 top-0 z-50">
-      <nav className="flex h-16 items-center justify-between px-5 md:px-10" aria-label="주요 메뉴">
-        <a href="/" className="flex items-center gap-3" aria-label="Negative Space 홈">
-          <Monogram className="h-6 w-6" />
-          <span className="ns-display text-base tracking-tight">Negative Space</span>
+    <header className="ns-nav-wrap pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 md:pt-4">
+      <GlassLight />
+      <nav className="lg lg-regular lg-interactive ns-nav pointer-events-auto" aria-label="주요 메뉴">
+        <a href="/" className="ns-nav-home" aria-label="Negative Space 홈">
+          <Monogram className="h-5 w-5" />
+          <span className="ns-display text-[15px] tracking-tight">Negative Space</span>
         </a>
-        <div className="flex items-center gap-1 md:gap-6">
-          <a href="/#sheet" className="ns-navlink hidden text-sm md:inline-block">글</a>
-          <a href="/#topics" className="ns-navlink hidden text-sm md:inline-block">주제</a>
-          <a href="/#about" className="ns-navlink hidden text-sm md:inline-block">소개</a>
-          <DecodeLink href="/#letters" label="구독하기" />
-        </div>
+        <span className="ns-nav-sep hidden md:block" aria-hidden="true" />
+        <a href="/#sheet" className="ns-navlink hidden md:inline-flex">글</a>
+        <a href="/#topics" className="ns-navlink hidden md:inline-flex">주제</a>
+        <a href="/#about" className="ns-navlink hidden md:inline-flex">소개</a>
+        <DecodeLink href="/#letters" label="구독하기" />
       </nav>
     </header>
   );

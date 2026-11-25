@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { RAIL_POSTS, formatDate } from "../../lib/blog/posts";
+import { Loupe } from "./loupe";
 import { prefersReducedMotion, useScrollProgress } from "./use-scroll-progress";
 
 export function ContactSheet() {
@@ -47,7 +48,7 @@ export function ContactSheet() {
         <div className="flex items-end justify-between px-5 md:px-10">
           <h2 id="sheet-title" className="text-4xl leading-none tracking-tight md:text-6xl">밀착 인화</h2>
           <p className="ns-mono hidden max-w-[22rem] text-right text-xs leading-relaxed text-paper/60 md:block">
-            최근에 쓴 글들. 마음에 드는 프레임에 표시해 두었어요.
+            최근에 쓴 글들. 프레임 위에 커서를 올리면 루페로 들여다볼 수 있어요.
           </p>
         </div>
         <ol ref={trackRef} className="ns-sheet-track mt-12 flex gap-6 px-5 md:gap-10 md:px-10" role="list">
@@ -74,6 +75,7 @@ export function ContactSheet() {
           ))}
         </ol>
       </div>
+      <Loupe scope={sectionRef} />
     </section>
   );
 }
