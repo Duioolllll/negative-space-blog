@@ -570,9 +570,22 @@ html.lg-refract .lg::before {
 .ns-card-image,
 .ns-film-print,
 .ns-row-preview {
-  position: relative;
   overflow: hidden;
   border-radius: var(--ns-r-surface);
+}
+/* .ns-row-preview is already absolutely positioned; everything else anchors
+ * its edge overlay here. */
+.ns-featured-figure,
+.ns-about-figure,
+.ns-post-figure,
+.ns-card-image,
+.ns-film-print {
+  position: relative;
+}
+/* The featured text sits over the photo's corner: round the corner it cuts so
+ * the photo reads as one surface with a rounded inner corner. */
+.ns-featured-card {
+  border-top-right-radius: var(--ns-r-surface);
 }
 .ns-film-print,
 .ns-row-preview {

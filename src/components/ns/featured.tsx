@@ -21,7 +21,7 @@ export function Featured() {
             loading="lazy"
           />
         </figure>
-        <div className="relative z-10 -mt-12 mr-6 bg-paper pt-6 pr-6 md:col-span-6 md:col-start-1 md:row-start-2 md:-mt-48 md:mr-0 md:pt-12 md:pr-14">
+        <div className="ns-featured-card relative z-10 -mt-12 mr-6 bg-paper pt-6 pr-6 md:col-span-6 md:col-start-1 md:row-start-2 md:-mt-48 md:mr-0 md:pt-12 md:pr-14">
           <p className="ns-eyebrow ns-mono text-xs uppercase tracking-[0.18em] text-safelight">이번 주의 글</p>
           <h2 id="featured-title" className="mt-4 text-4xl leading-[1.1] tracking-tight text-ink md:text-6xl">
             {post.title}
