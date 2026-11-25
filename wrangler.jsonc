@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "negative-space-blog",
+  // TanStack Start SSR bundle produced by `vite build`.
+  "main": "dist/server/server.js",
+  "compatibility_date": "2025-05-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // Static files in dist/client are served directly; everything else falls
+  // through to the SSR Worker. Keep run_worker_first off so /assets/* is served
+  // by the asset layer.
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "none"
+  },
+
+  // Newsletter subscribers. Create once with:
+  //   npx wrangler d1 create negative-space-blog
+  // and paste the printed database_id below.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "negative-space-blog",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+
+  // Custom domain (optional): uncomment after the domain is on Cloudflare.
+  // "routes": [{ "pattern": "blog.example.com", "custom_domain": true }]
+}
