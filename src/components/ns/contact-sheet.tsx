@@ -24,7 +24,8 @@ export function ContactSheet() {
         return;
       }
       section.dataset.static = "false";
-      const distance = Math.max(0, track.scrollWidth - window.innerWidth);
+      // Travel inside the (inset) stage, not the whole window.
+      const distance = Math.max(0, track.scrollWidth - track.clientWidth);
       travel.current = distance;
       section.style.height = `${window.innerHeight + distance}px`;
     };
@@ -56,7 +57,7 @@ export function ContactSheet() {
             <li key={post.slug} className="shrink-0">
               <a href={`/posts/${post.slug}`} className={`ns-frame group block w-[78vw] md:w-[30rem] ${i === 1 ? "is-marked" : ""}`}>
                 <div className="ns-film relative bg-[#050506] px-3 py-6">
-                  <div className="relative overflow-hidden">
+                  <div className="ns-film-print relative overflow-hidden">
                     <img src={post.image} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
                     <svg className="ns-loop pointer-events-none absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)]" viewBox="0 0 100 75" preserveAspectRatio="none" aria-hidden="true">
                       <path d="M6 40 C 4 14, 40 4, 62 6 S 98 22, 95 44 S 60 74, 34 70 S 2 58, 9 30" fill="none" stroke="#C8321E" strokeWidth="0.7" pathLength="1" />

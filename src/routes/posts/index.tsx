@@ -34,7 +34,7 @@ function PostsIndex() {
           {list.map((p) => (
             <li key={p.slug}>
               <a href={`/posts/${p.slug}`} className="ns-card group block">
-                <div className="overflow-hidden bg-ink">
+                <div className="ns-card-image overflow-hidden bg-ink">
                   <img src={p.image} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
                 </div>
                 <p className="ns-mono mt-4 text-xs text-mid">{p.frame}A / {formatDate(p.date)} / {topicById(p.topic).name}</p>

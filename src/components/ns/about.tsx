@@ -2,7 +2,7 @@ export function About() {
   return (
     <section id="about" className="ns-about relative px-5 py-24 md:px-10 md:py-40" aria-labelledby="about-title">
       <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-8">
-        <figure className="md:col-span-4">
+        <figure className="ns-about-figure md:col-span-4">
           <img src="/assets/about-hands.jpg" alt="창가 빛 아래에서 노트에 연필로 글을 쓰는 손" className="aspect-[3/4] w-full object-cover" loading="lazy" />
         </figure>
         <div className="relative md:col-span-7 md:col-start-6 md:pt-10">

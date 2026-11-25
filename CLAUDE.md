@@ -18,7 +18,9 @@ Personal Korean blog "Negative Space". React 19 + TanStack Start (SSR) + Tailwin
 ## Rules
 - SSR-safe: no `window`/`document` at module top level or during render; only in effects/handlers.
 - Scroll motion writes CSS variables directly (`use-scroll-progress.ts`); never per-frame React state. Every animation needs a `prefers-reduced-motion` fallback (see bottom of `styles.css`).
-- Design system (see `docs/design-brief.md`): paper `#EDEDEA`, ink `#111113`, one accent safelight red `#C8321E`, all corners sharp (0 radius), Satoshi + Pretendard + JetBrains Mono. No em dashes in visible copy. Each CTA has its own interaction; no shared button class.
+- Design system (see `docs/design-brief.md`): paper `#EDEDEA`, ink `#111113`, one accent safelight red `#C8321E`, Satoshi + Pretendard + JetBrains Mono. No em dashes in visible copy.
+- Surfaces follow the Liquify CSS policy, all tokens in `:root` of `styles.css`: radius by role only (`--ns-r-surface` 20 / `--ns-r-bar` 25 / `--ns-r-control` 17 / `--ns-r-chip` 12, nested media concentric), one shared edge highlight `--ns-edge` on every panel, card and image, hover pop on `--ns-spring` (controls 1.05, cards 1.03). Don't hardcode radii, shadows or easings.
+- Glass (`.lg`, `lg-regular` / `lg-clear` / `lg-prominent`) is only for the functional layer (nav, primary action, field, loupe), never glass on glass. Chromium gets edge refraction via `#ns-lens` (`lens-filter.tsx`, enabled by `html.lg-refract`); other browsers get the frost fallback.
 - D1 migrations are additive only (`migrations/000N_*.sql`); they run against live data on deploy.
 - Security headers/CSP live in `src/lib/security-headers.server.ts`; add any new external font/image host there.
 

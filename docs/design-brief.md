@@ -43,3 +43,11 @@ Apple's Liquid Glass rules, adapted to the web (`.lg` in styles.css):
 - Text on glass is full contrast; hierarchy by size and weight.
 - `prefers-reduced-transparency` turns glass solid; `prefers-contrast: more` adds an outline.
 - Signature moment: the loupe. Hovering a contact-sheet frame shows a glass lens that magnifies the print, the way a photographer reads a contact sheet.
+
+## Liquify CSS policy (2026-11-25)
+Applied from the reading of NMWplays/Liquify (a Spotify Liquid Glass theme, AGPL-3.0). Its rules are reimplemented here, no code copied:
+- **Radius by role, not by taste.** Panels, cards and images 20px; floating bars and fields 25px; buttons and inputs 17px; chips and nested media 12px (concentric with their padded parent). This replaces the earlier "all corners sharp" rule.
+- **One edge for everything.** Every surface, glass or not, photos included, carries the same inset highlight (`--ns-edge`), drawn by an `::after` overlay so it sits on top of images.
+- **Glass bends light, it doesn't fog it.** Where the browser supports it (Chromium), glass uses an edge-refraction SVG lens with a slight chromatic fringe and only a few pixels of blur. Elsewhere it falls back to a 2rem frost.
+- **Floating panels.** The dark chapters (hero stage, contact sheet, newsletter) float inset from the viewport with the surface radius.
+- **Spring motion.** Controls pop to 1.05 and cards to 1.03 on an overshooting spring (0.28s); things appearing scale in from 0.86.

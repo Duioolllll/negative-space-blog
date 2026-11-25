@@ -54,7 +54,7 @@ function PostPage() {
               {post.dek && <p className="mt-6 max-w-[38rem] text-lg leading-relaxed text-graphite">{post.dek}</p>}
             </div>
           </header>
-          <figure className="mt-12 md:mt-16">
+          <figure className="ns-post-figure mt-12 md:mt-16">
             <img src={post.image} alt="" className="max-h-[78vh] w-full object-cover" />
           </figure>
           <div

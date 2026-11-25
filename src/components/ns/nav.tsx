@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { GlassLight } from "./glass";
+import { LensFilter } from "./lens-filter";
 import { Monogram } from "./monogram";
 
 const GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789";
@@ -44,6 +45,7 @@ export function Nav() {
   return (
     <header className="ns-nav-wrap pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 md:pt-4">
       <GlassLight />
+      <LensFilter />
       <nav className="lg lg-regular lg-interactive ns-nav pointer-events-auto" aria-label="주요 메뉴">
         <a href="/" className="ns-nav-home" aria-label="Negative Space 홈">
           <Monogram className="h-5 w-5" />

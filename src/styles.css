@@ -2,7 +2,8 @@
 
 /* ==========================================================================
  * Negative Space: brand tokens.
- * Paper, ink and one safelight red. All corners sharp.
+ * Paper, ink and one safelight red. Surfaces follow the Liquify CSS policy:
+ * a fixed radius scale, one shared edge highlight, spring motion.
  * ========================================================================== */
 @theme {
   --color-paper: #ededea;
@@ -11,6 +12,35 @@
   --color-mid: #6e6f72;
   --color-hairline: #c9c9c5;
   --color-safelight: #c8321e;
+}
+
+:root {
+  /* Radius scale (one value per role, never ad hoc). */
+  --ns-r-surface: 20px; /* panels, cards, images */
+  --ns-r-bar: 25px; /* floating bars and fields */
+  --ns-r-control: 17px; /* buttons, inputs, icon buttons */
+  --ns-r-chip: 12px; /* chips, small inner buttons, nested media */
+  --ns-inset: 12px; /* gap between a floating panel and the viewport */
+
+  /* One edge highlight for every surface, glass or not. */
+  --ns-edge:
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* Glass: edge refraction with a light blur where supported, frost elsewhere. */
+  --ns-refract-blur: 3px;
+  --ns-frost-blur: 2rem;
+
+  /* Motion. */
+  --ns-spring: cubic-bezier(0.3, 2.25, 0.32, 1); /* hover pop, 0.28s */
+  --ns-pop-in: cubic-bezier(0.34, 1.7, 0.64, 1); /* things appearing, 0.24s */
+  --ns-exit: cubic-bezier(0.8, 0, 0.2, 1); /* things leaving, 0.18s */
+}
+@media (max-width: 767px) {
+  :root {
+    --ns-inset: 8px;
+  }
 }
 
 @layer base {
@@ -252,7 +282,7 @@
 .lg {
   position: relative;
   isolation: isolate;
-  border-radius: 999px;
+  border-radius: var(--ns-r-bar);
   --lg-x: 30%;
   --lg-y: 0%;
   box-shadow:
@@ -270,8 +300,22 @@
   z-index: -1;
   border-radius: inherit;
   background: var(--lg-tint);
-  -webkit-backdrop-filter: blur(var(--lg-blur, 14px)) saturate(1.8) brightness(var(--lg-bright, 1.06));
-  backdrop-filter: blur(var(--lg-blur, 14px)) saturate(1.8) brightness(var(--lg-bright, 1.06));
+  -webkit-backdrop-filter: blur(var(--ns-frost-blur)) saturate(1.4) brightness(var(--lg-bright, 1.06));
+  backdrop-filter: blur(var(--ns-frost-blur)) saturate(1.4) brightness(var(--lg-bright, 1.06));
+}
+/* Chromium: real edge refraction (#ns-lens in lens-filter.tsx), barely blurred. */
+html.lg-refract .lg::before {
+  -webkit-backdrop-filter: url(#ns-lens) blur(var(--lg-refract-blur, var(--ns-refract-blur))) saturate(1.5)
+    brightness(var(--lg-bright, 1.06));
+  backdrop-filter: url(#ns-lens) blur(var(--lg-refract-blur, var(--ns-refract-blur))) saturate(1.5)
+    brightness(var(--lg-bright, 1.06));
+}
+.ns-lens-host {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 /* The edge: a bright rim on the lit side, a soft one opposite, and a specular
  * sheen that follows the pointer on interactive glass. */
@@ -284,22 +328,16 @@
   background:
     radial-gradient(120% 140% at var(--lg-x) var(--lg-y), rgba(255, 255, 255, var(--lg-sheen, 0.32)), rgba(255, 255, 255, 0) 55%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 45%);
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, var(--lg-rim, 0.85)),
-    inset 0 -1px 0.5px rgba(255, 255, 255, calc(var(--lg-rim, 0.85) * 0.35)),
-    inset 0 0 0 0.5px rgba(255, 255, 255, calc(var(--lg-rim, 0.85) * 0.45)),
-    inset 0 -10px 18px -14px rgba(17, 17, 19, 0.35);
-  mix-blend-mode: plus-lighter;
+  box-shadow: var(--ns-edge);
 }
 .lg-regular {
   --lg-tint: rgba(237, 237, 234, 0.52);
+  --lg-refract-blur: 6px; /* ink text over anything: keep it readable */
   color: #111113;
 }
 .lg-clear {
   --lg-tint: rgba(17, 17, 19, 0.26);
-  --lg-blur: 18px;
   --lg-bright: 0.92;
-  --lg-rim: 0.6;
   --lg-sheen: 0.2;
   color: #fff;
 }
@@ -309,15 +347,9 @@
   --lg-sheen: 0.38;
   color: #fff;
 }
-.lg-interactive:hover {
-  transform: scale(1.025);
-}
-.lg-interactive:active {
-  transform: scale(0.97);
-  transition-duration: 0.12s;
-}
 @media (prefers-reduced-transparency: reduce) {
-  .lg::before {
+  .lg::before,
+  html.lg-refract .lg::before {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -363,7 +395,7 @@
   align-items: center;
   height: 2.5rem;
   padding: 0 0.85rem;
-  border-radius: 999px;
+  border-radius: var(--ns-r-control);
   font-size: 0.875rem;
   font-weight: 500;
   transition: background-color 0.2s;
@@ -378,7 +410,7 @@
   height: 2.5rem;
   margin-left: 0.25rem;
   padding: 0 1.1rem;
-  border-radius: 999px;
+  border-radius: var(--ns-r-control);
   background: #111113;
   color: #ededea;
   font-size: 0.875rem;
@@ -397,6 +429,7 @@
 
 /* Hero primary action ----------------------------------------------------- */
 .ns-cta-hero {
+  border-radius: var(--ns-r-control);
   display: inline-flex;
   align-items: center;
   height: 3.5rem;
@@ -494,17 +527,13 @@
   flex-shrink: 0;
   height: 3rem;
   padding: 0 1.4rem;
-  border-radius: 999px;
+  border-radius: var(--ns-r-control);
   background: #c8321e;
   color: #fff;
   font-weight: 600;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s;
 }
 .ns-field-submit:hover {
   background: #d9412c;
-}
-.ns-field-submit:active {
-  transform: scale(0.95);
 }
 .ns-field-submit:disabled {
   cursor: progress;
@@ -519,7 +548,119 @@
   outline-offset: 2px;
 }
 .ns-receipt {
-  animation: ns-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: ns-pop-in 0.24s var(--ns-pop-in) both;
+}
+@keyframes ns-pop-in {
+  from {
+    transform: scale(0.86);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+ * Surfaces (Liquify policy): every panel, card and image gets the radius for
+ * its role and the shared edge highlight, drawn by an overlay so it sits on
+ * top of the image.
+ * ========================================================================== */
+.ns-featured-figure,
+.ns-about-figure,
+.ns-post-figure,
+.ns-card-image,
+.ns-film-print,
+.ns-row-preview {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ns-r-surface);
+}
+.ns-film-print,
+.ns-row-preview {
+  /* Nested inside a padded surface: concentric with the parent. */
+  border-radius: var(--ns-r-chip);
+}
+.ns-featured-figure::after,
+.ns-about-figure::after,
+.ns-post-figure::after,
+.ns-card-image::after,
+.ns-film-print::after,
+.ns-row-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--ns-edge);
+  pointer-events: none;
+}
+.ns-film {
+  border-radius: var(--ns-r-surface);
+  box-shadow: var(--ns-edge);
+}
+.ns-row {
+  border-radius: var(--ns-r-surface);
+}
+
+/* Floating panels: dark chapters sit inset from the viewport, rounded, the
+ * way Liquify floats its main view over the background. */
+.ns-letters {
+  margin: 0 var(--ns-inset) var(--ns-inset);
+  border-radius: var(--ns-r-surface);
+  box-shadow: var(--ns-edge);
+}
+.ns-hero-stage {
+  margin: 0 var(--ns-inset);
+  top: var(--ns-inset);
+  height: calc(100dvh - var(--ns-inset) * 2);
+  border-radius: var(--ns-r-surface);
+  box-shadow: var(--ns-edge);
+}
+.ns-sheet {
+  background: transparent;
+  padding: 0 var(--ns-inset);
+}
+.ns-sheet-stage {
+  background: #111113;
+  border-radius: var(--ns-r-surface);
+  box-shadow: var(--ns-edge);
+}
+@media (min-width: 768px) {
+  .ns-sheet-stage {
+    top: var(--ns-inset);
+    height: calc(100dvh - var(--ns-inset) * 2);
+  }
+}
+
+/* Motion (Liquify policy): controls pop to 1.05, cards to 1.03, on one
+ * overshooting spring. Pressing sinks slightly. */
+.ns-cta-hero,
+.ns-nav-cta,
+.ns-navlink,
+.ns-field-submit,
+.ns-film,
+.ns-card-image {
+  transition:
+    transform 0.28s var(--ns-spring),
+    background-color 0.2s,
+    box-shadow 0.28s ease;
+}
+.ns-cta-hero:hover,
+.ns-nav-cta:hover,
+.ns-navlink:hover,
+.ns-field-submit:hover {
+  transform: scale(1.05);
+}
+.ns-frame:hover .ns-film,
+.ns-frame:focus-visible .ns-film,
+.ns-card:hover .ns-card-image,
+.ns-card:focus-visible .ns-card-image {
+  transform: scale(1.03);
+}
+.ns-cta-hero:active,
+.ns-nav-cta:active,
+.ns-navlink:active,
+.ns-field-submit:active {
+  transform: scale(0.96);
+  transition-duration: 0.12s;
 }
 
 /* Posts ------------------------------------------------------------------ */
@@ -591,8 +732,16 @@
   .ns-receipt {
     animation: none;
   }
-  .lg-interactive:hover,
-  .lg-interactive:active {
+  .ns-cta-hero:hover,
+  .ns-nav-cta:hover,
+  .ns-navlink:hover,
+  .ns-field-submit:hover,
+  .ns-cta-hero:active,
+  .ns-nav-cta:active,
+  .ns-navlink:active,
+  .ns-field-submit:active,
+  .ns-frame:hover .ns-film,
+  .ns-card:hover .ns-card-image {
     transform: none;
   }
   .ns-body *,
